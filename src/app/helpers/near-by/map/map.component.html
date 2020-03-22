@@ -1,0 +1,21 @@
+  <div class="map" [id]="mapId">
+    <div class="leaflet-top" style="width: 100%">
+      <div class="leaflet-control" style="width: 100%">
+        <div style="display: flex; justify-content: flex-end; padding-right: 12px;">
+          <div style="width: 50%">
+            <ion-segment [value]="activeSegment" (ionChange)="segmentChanged($event)">
+              <ion-segment-button value="map" layout="icon-start">
+                <ion-icon name="map"></ion-icon>
+                <ion-label>&nbsp;{{ 'helper.nearby.mapcontrol.map' | translate }}</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="list" layout="icon-start">
+                <ion-icon name="list"></ion-icon>
+                <ion-label>&nbsp;{{ 'helper.nearby.mapcontrol.list' | translate }}</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+        </div>
+        <ion-searchbar placeholder="{{ 'helper.nearby.mapcontrol.search' | translate }}" class="app-searchbar" debounce="500"></ion-searchbar>
+      </div>
+    </div>
+  </div>

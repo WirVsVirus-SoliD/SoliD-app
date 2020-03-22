@@ -1,18 +1,43 @@
 <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button color="medium">
+        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-grid>
-    <ion-row>
-      <ion-button>
-        <ion-icon slot="icon-only" name="help-circle-outline"></ion-icon>
-      </ion-button>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="12">
+        <div class="ion-text-center">
+          <img src="assets/img/logo.svg" alt="logo"/>
+        </div>
+      </ion-col>
     </ion-row>
     <ion-row>
-      <ion-button (click)="navigateHelper()">Ich will helfen</ion-button>
+      <ion-col size="12">
+        <ion-button expand="block" shape="round" (click)="navigateHelper()">{{ 'helper.home.cta' | translate }}</ion-button>
+      </ion-col>
     </ion-row>
     <ion-row>
-      <ion-button (click)="navigateProvider()">Ich benötige Hilfe</ion-button>
+      <ion-col size="12">
+        <ion-button expand="block" shape="round" (click)="navigateProvider()">{{ 'provider.home.cta' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-top ion-padding-top">
+      <ion-col size="12" class="ion-text-center">
+        <ion-text color="medium">
+          {{ 'app.home.hintLogin' | translate }}
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-button expand="block" fill="outline" shape="round" (click)="login()">{{ 'app.home.login' | translate }}</ion-button>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

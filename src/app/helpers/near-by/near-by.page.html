@@ -3,11 +3,5 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div id="mapId"></div>
-  <ion-item style="cursor: pointer" (click)="locatePosition()">
-    <ion-button fill="clear">
-      <ion-icon slot="start" name="map"></ion-icon>
-      Locate Position
-    </ion-button>
-  </ion-item>
+  <solid-map [activeSegment]="activeSegment" [providerList]="providerList"></solid-map>
 </ion-content>
