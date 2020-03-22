@@ -18,11 +18,11 @@ export class BackendService {
     return this.httpClient.post<IProvider>(`${this.backendBaseUrl}/providers`, providerRequest);
   }
 
-  getProviders(lat: number, long: number, range = 5): Observable<Array<IProvider>> {
+  getProviders(lat: number, long: number, range = 30): Observable<Array<IProvider>> {
     const params = new HttpParams()
-      .set('lat', lat.toString())
-      .set('long', long.toString())
-      .set('range', range.toString());
+      .set('latitude', lat.toString())
+      .set('longitude', long.toString())
+      .set('radius', range.toString());
     return this.httpClient.get<Array<IProvider>>(`${this.backendBaseUrl}/providers`, {
       params
     });
@@ -40,13 +40,14 @@ export class BackendService {
     return this.httpClient.delete(`${this.backendBaseUrl}/providers/${providerId}`);
   }
 
-  uploadPicture(providerId: number) {
-    // TODO file-upload
-    return this.httpClient.post(`${this.backendBaseUrl}/providers/${providerId}/upload-picture`, {});
+  uploadPicture(providerId: number, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post(`${this.backendBaseUrl}/providers/${providerId}/upload-picture`, formData);
   }
 
-  getProviderPicture(providerId: number): Observable<any> {
-    return this.httpClient.get<any>(`${this.backendBaseUrl}/providers/${providerId}/download-picture`);
+  getProviderPictureUrl(providerId: number) {
+    return `${this.backendBaseUrl}/providers/${providerId}/download-picture`;
   }
 
   getInquiredHelpers(providerId: number): Observable<IHelperInquiry> {
