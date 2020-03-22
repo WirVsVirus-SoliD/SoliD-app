@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Map } from 'leaflet';
 import { BackendService } from 'src/app/common/services/backend.service';
-import { IProviderResponse } from 'src/app/common/interfaces/providers-controller.interface';
 import { MapService } from 'src/app/common/services/map.service';
 import { uuid } from 'uuidv4';
+import { IProvider } from 'src/app/common/interfaces/providers-controller.interface';
 
 @Component({
   selector: 'solid-map',
@@ -16,7 +16,7 @@ export class MapComponent {
   private map: Map;
 
   @Input() public activeSegment: string;
-  @Input() public providerList: Array<IProviderResponse> = [];
+  @Input() public providerList: Array<IProvider> = [];
   constructor(
     private mapSrv: MapService
   ) { }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IProviderResponse } from 'src/app/common/interfaces/providers-controller.interface';
+import { IProvider, IHelper } from 'src/app/common/interfaces/providers-controller.interface';
+import { Crops } from 'src/app/common/enums/crops.enum';
+import { BackendService } from 'src/app/common/services/backend.service';
 
 @Component({
   selector: 'app-near-by',
@@ -9,36 +11,13 @@ import { IProviderResponse } from 'src/app/common/interfaces/providers-controlle
 export class NearByPage {
 
   public activeSegment = 'map';
-  public providerList: Array<IProviderResponse> = [{
-    "address": {
-      "city": "string",
-      "housenr": "string",
-      "street": "string",
-      "zip": "string"
-    },
-    "contactFirstName": "string",
-    "contactLastName": "string",
-    "crops": [
-      "Erdbeeren"
-    ],
-    "distance": 0,
-    "email": "string",
-    "farmName": "string",
-    "hourlyRate": 0,
-    "latitude": 51.133481,
-    "longitude": 10.018343,
-    "minWorkPeriod": 0,
-    "overnightPossible": true,
-    "phone": "string",
-    "pickupPossible": true,
-    "pickupRange": 0,
-    "providerId": 0,
-    "url": "string"
-  }];
+  public providerList: Array<IProvider>;
 
   constructor(
-
-  ) { }
+    private backendService: BackendService
+  ) {
+    this.backendService.getProviders(51.133481, 10.018343).subscribe(res => this.providerList = res);
+  }
 
   segmentChanged($event: Event) {
     this.activeSegment = ($event.target as HTMLInputElement).value;
