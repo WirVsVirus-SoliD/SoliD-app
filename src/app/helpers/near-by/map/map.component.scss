@@ -1,9 +1,41 @@
 .map {
   height: 100%;
+
+  .custom-marker-icon span {
+    display: block;
+    width: 125%;
+    height: 125%;
+    text-align: center;
+    border-radius: 10px;
+    padding: 0;
+    background: #fff;
+    border: 1px solid var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    box-shadow: 1px 1px 1px #000;
+    font-size: .75em;
+    font-weight: bold;
+  }
+
+
 }
 
 ion-segment {
   border: 1px solid var(--ion-color-primary);
   color: var(--ion-color-primary);
   background: #fff;
+}
+
+.app-searchbar {
+  --background: rgba(255,255,255,1) !important;
+}
+
+.resultbox {
+  margin: 0px 13px;
+  margin-top: -10px;
+  border-radius: 10px;
+  padding: 0;
+
+  ion-item {
+    padding: 5px;
+  }
 }

@@ -42,5 +42,62 @@ ion-icon {
     mask-image: url(assets/img/icons/place.svg);
   }
 
+  &[class*="solid-provider"] {
+    mask-image: url(assets/img/icons/provider.svg);
+  }
+
+  &[class*="solid-strawberry"] {
+    mask-image: url(assets/img/icons/strawberry.svg);
+  }
+
+  &[class*="solid-bed"] {
+    mask-image: url(assets/img/icons/bed.svg);
+  }
+
+}
+
+ion-text.big {
+  font-size: 1.25rem;
+}
+
+.custom-marker-icon span {
+  display: block;
+  border-radius: 5rem;
+  padding: 0;
+  font-size: 1em;
+
+  &.inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+    padding: 1rem;
+  }
+  &.outer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    padding: 0.65rem;
+    background: rgba(var(--ion-color-primary-rgb), 0.4);
+  }
+
+  &.provider {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 52px;
+    height: 63px;
+    font-size: 1.25rem;
+    padding-bottom: 0.5rem;
+    background: url(assets/img/icons/marker.svg);
+    color: var(--ion-color-primary-contrast);
+  }
+
+
 
 }

@@ -20,6 +20,17 @@
         "map": "Karte",
         "list": "Liste",
         "search": "Dein Standort"
+      },
+      "list": {
+        "title": "Hier wird deine Hilfe gesucht",
+        "radius": "{radius} km Umkreis",
+        "location": "{location}, {distance} km Entfernung",
+        "minWorkPeriod": "Min. {period} Tage",
+        "moreInfos": "Mehr Infos"
+      },
+      "details": {
+        "cta": "Ich will helfen",
+        "overnightPossible": "Übernachtungsmöglichkeit"
       }
     }
   },

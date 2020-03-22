@@ -22,9 +22,7 @@ export class MapService extends BaseService {
         apiKey: '',
         tileMapUrl: 'https://c.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-        maxZoom: 16,
-        zoomDelta: 0.25,
-        zoomSnap: 0.25,
+        maxZoom: 18,
         wms: false,
         zoomControl: false
       }
@@ -61,7 +59,6 @@ export class MapService extends BaseService {
       layer.addTo(map);
 
       map.whenReady(data => {
-        if(config.onLoad) { config.onLoad(data, map); }
         resolve(map);
       });
 

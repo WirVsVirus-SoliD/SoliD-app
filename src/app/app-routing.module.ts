@@ -8,6 +8,8 @@ import { ProfilePage } from './helpers/profile/profile.page';
 import { ProviderTabsPage } from './providers/provider-tabs/provider-tabs.page';
 import { HelpersPage } from './providers/helpers/helpers.page';
 import { DataPage } from './providers/data/data.page';
+import { DetailsComponent } from './helpers/near-by/details/details.component';
+import { ProviderResolver } from './core/resolver/provider.resolver';
 
 const routes: Routes = [
   {
@@ -23,8 +25,10 @@ const routes: Routes = [
       { path: '', redirectTo: 'near-by', pathMatch: 'full' },
       {
         path: 'near-by',
-        component: NearByPage
+        component: NearByPage,
       },
+      { path: 'details/:providerId', component: DetailsComponent, resolve: { provider: ProviderResolver } },
+
       {
         path: 'jobs',
         component: JobsPage

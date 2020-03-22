@@ -1,0 +1,59 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="6">
+
+    </ion-col>
+    <ion-col size="6">
+      <ion-segment [value]="activeSegment" (ionChange)="segmentChanged($event)">
+        <ion-segment-button value="map" layout="icon-start">
+          <ion-icon name="map"></ion-icon>
+          <ion-label>&nbsp;{{ 'helper.nearby.mapcontrol.map' | translate }}</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="list" layout="icon-start">
+          <ion-icon name="list"></ion-icon>
+          <ion-label>&nbsp;{{ 'helper.nearby.mapcontrol.list' | translate }}</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="ion-margin-top ion-text-center">
+      <ion-text color="dark" class="big"><strong>{{ 'helper.nearby.list.title' | translate }}</strong></ion-text>
+    </ion-col>
+  </ion-row>
+
+  <ion-card *ngFor="let provider of providerList">
+    <img src="https://solid-backend.52-174-17.190.nip.io/providers/1/download-picture/{{ provider.providerId }}"/>
+
+    <ion-item lines="none">
+      <ion-label>{{ provider.farmName }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none" class="info">
+      <ion-icon class="solid-place" slot="start"></ion-icon>
+      <ion-label>{{ 'helper.nearby.list.location' | translate:{ location: provider.address.city, distance: provider.distance.toFixed(0) } }}</ion-label>
+    </ion-item>
+
+    <ion-item lines="none" class="info">
+      <ion-icon name="alarm" slot="start"></ion-icon>
+      <ion-label>{{ 'helper.nearby.list.minWorkPeriod' | translate:{ period: provider.minWorkPeriod } }}</ion-label>
+    </ion-item>
+
+    <ion-row>
+      <ion-col size="6" class="crop-list">
+        <ng-container *ngFor="let crop of provider.crops; index as i">
+          <span *ngIf="i < 2">
+            <ion-icon class="solid-strawberry"></ion-icon><br/>
+            {{ crop }}
+          </span>
+        </ng-container>
+        <span class="elipsize" *ngIf="provider.crops.length > 2">...</span>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button expand="full" shape="round" color="primary" (click)="openDetails(provider)">{{ 'helper.nearby.list.moreInfos' | translate }}</ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-card>
+
+</ion-grid>

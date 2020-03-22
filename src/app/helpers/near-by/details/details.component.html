@@ -1,0 +1,50 @@
+<ion-list>
+  <ion-item lines="none" class="image">
+    <img src="https://solid-backend.52-174-17.190.nip.io/providers/1/download-picture/{{ provider.providerId }}"/>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label>{{ provider.farmName }}</ion-label>
+  </ion-item>
+
+  <ion-item lines="none">
+      <div class="location">
+        <ion-icon class="solid-place" slot="start"></ion-icon>
+        <ion-label>{{ 'helper.nearby.list.location' | translate:{ location: provider.address.city, distance: provider.distance.toFixed(0) } }}</ion-label>
+      </div>
+  </ion-item>
+
+  <ion-row>
+    <ion-col size="5">
+      <ion-item lines="none" class="info">
+        <ion-icon name="alarm" slot="start"></ion-icon>
+        <ion-label>{{ 'helper.nearby.list.minWorkPeriod' | translate:{ period: provider.minWorkPeriod } }}</ion-label>
+      </ion-item>
+    </ion-col>
+    <ion-col size="7">
+      <ion-item lines="none" class="info">
+        <ion-icon class="solid-bed" slot="start"></ion-icon>
+        <ion-label>{{ 'helper.nearby.details.overnightPossible' | translate }}</ion-label>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="6" class="crop-list">
+      <span *ngFor="let crop of provider.crops;">
+        <ion-icon class="solid-strawberry"></ion-icon><br/>
+        {{ crop }}
+      </span>
+    </ion-col>
+  </ion-row>
+
+  <ion-item lines="none">
+    <ion-text><p>Die Tätigkeiten, bei denen wir Hilfe benötigen, umfassen Hilfe bei der Ernte wie Jäten, oder auch andere, saisonale Tätigkeiten.</p></ion-text>
+  </ion-item>
+
+  <ion-row>
+    <ion-col size="12">
+      <ion-button expand="full" shape="round" color="primary">{{ 'helper.nearby.details.cta' | translate }}</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-list>

@@ -3,5 +3,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <solid-map [activeSegment]="activeSegment" [providerList]="providerList"></solid-map>
+  <ng-container [ngSwitch]="activeSegment">
+    <solid-map *ngSwitchCase="'map'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerList"></solid-map>
+    <solid-provider-list *ngSwitchCase="'list'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerList"></solid-provider-list>
+  </ng-container>
 </ion-content>

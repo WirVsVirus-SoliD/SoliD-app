@@ -1,0 +1,26 @@
+ion-segment {
+  border: 1px solid var(--ion-color-primary);
+  color: var(--ion-color-primary);
+  background: #fff;
+}
+
+.info {
+  font-size: 0.75rem;
+}
+
+.crop-list {
+
+  span {
+    padding-top: 10px;
+    display: block;
+    float: left;
+    text-align: center;
+    font-size: 0.8rem;
+    width: 40%;
+  }
+
+  span.elipsize {
+    width: 20%;
+  }
+
+}

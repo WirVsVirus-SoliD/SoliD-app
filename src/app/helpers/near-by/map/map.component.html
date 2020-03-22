@@ -15,7 +15,10 @@
             </ion-segment>
           </div>
         </div>
-        <ion-searchbar placeholder="{{ 'helper.nearby.mapcontrol.search' | translate }}" class="app-searchbar" debounce="500"></ion-searchbar>
+        <ion-searchbar (ionChange)="search($event)" [value]="searchValue" placeholder="{{ 'helper.nearby.mapcontrol.search' | translate }}" class="app-searchbar" debounce="500"></ion-searchbar>
+        <ion-list class="resultbox" *ngIf="showSearchResultList">
+          <ion-item lines="full" (click)="selectSearchResult(item)" *ngFor="let item of searchResultList">{{ item }}</ion-item>
+        </ion-list>
       </div>
     </div>
   </div>
