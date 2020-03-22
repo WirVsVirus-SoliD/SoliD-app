@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  backendBaseUrl: 'https://solid-backend.52-174-17.190.nip.io',
 };
 
 /*

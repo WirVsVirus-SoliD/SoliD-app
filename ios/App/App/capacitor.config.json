@@ -1,6 +1,6 @@
 {
   "appId": "de.wirvsvirus.hack",
-  "appName": "SoliD-app",
+  "appName": "soliD-app",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
