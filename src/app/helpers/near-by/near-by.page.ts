@@ -18,7 +18,7 @@ export class NearByPage {
     private cdRef: ChangeDetectorRef
   ) {
     this.backendService.getProviders(48.8848234, 9.1261528, 100).subscribe(res => {
-      this.providerGroups = res.map(r => [r]);
+      this.providerGroups = (res.length > 3) ? [[res.pop(), res.pop()], ...res.map(r => [r])] : res.map(r => [r]); 
       this.cdRef.markForCheck();
     });
   }

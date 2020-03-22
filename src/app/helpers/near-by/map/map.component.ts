@@ -63,6 +63,7 @@ export class MapComponent {
           mapId: this.mapId,
           position: { latitude: 0, longitude: 0, zoom: 16 },
           onMoveEnd: (e) => {
+
           }
       }).then(map => {
         this.map = map;
