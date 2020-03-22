@@ -2,10 +2,8 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { IProviderOfferResponse, IProviderRequest, IProviderResponse } from '../interfaces/providers-controller.interface';
-import { IOfferCreateRequest, IOfferUpdateRequest, IOfferResponse } from '../interfaces/offers-controller.interface';
-import { IHelperRequest, IHelperResponse } from '../interfaces/helpers-controller.interface';
-import { IFavoriteCreateRequest, IFavoriteCreateResponse } from '../interfaces/favorites-controller.interface';
+import { IHelperInquiry, IProvider, IProviderRequest } from '../interfaces/providers-controller.interface';
+import { IHelper, IHelperFavorite, IHelperProviderRequest, IProviderInquired } from '../interfaces/helpers-controller.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -16,77 +14,91 @@ export class BackendService {
 
   constructor(private httpClient: HttpClient) { }
 
-  createProvider(providerRequest: IProviderRequest): Observable<IProviderResponse> {
-    return this.httpClient.post<IProviderResponse>(`${this.backendBaseUrl}/providers`, providerRequest);
+  createProvider(providerRequest: IProviderRequest): Observable<IProvider> {
+    return this.httpClient.post<IProvider>(`${this.backendBaseUrl}/providers`, providerRequest);
   }
 
-  getProviders(lat: number, long: number, range = 5): Observable<Array<IProviderResponse>> {
+  getProviders(lat: number, long: number, range = 30): Observable<Array<IProvider>> {
     const params = new HttpParams()
-      .set('lat', lat.toString())
-      .set('long', long.toString())
-      .set('range', range.toString());
-    return this.httpClient.get<Array<IProviderResponse>>(`${this.backendBaseUrl}/providers`, {
+      .set('latitude', lat.toString())
+      .set('longitude', long.toString())
+      .set('radius', range.toString());
+    return this.httpClient.get<Array<IProvider>>(`${this.backendBaseUrl}/providers`, {
       params
     });
   }
 
+  getProvider(providerId: number): Observable<IProvider> {
+    return this.httpClient.get<IProvider>(`${this.backendBaseUrl}/providers/${providerId}`);
+  }
+
   updateProvider(providerId: number, providerRequest: IProviderRequest) {
-    return this.httpClient.put<IProviderResponse>(`${this.backendBaseUrl}/providers/${providerId}`, providerRequest);
+    return this.httpClient.put<IProvider>(`${this.backendBaseUrl}/providers/${providerId}`, providerRequest);
   }
 
   deleteProvider(providerId: number) {
     return this.httpClient.delete(`${this.backendBaseUrl}/providers/${providerId}`);
   }
 
-  // TODO missing attributes in response according to swagger-ui? (e.g. contacted)
-  getProviderOffers(providerId: number): Observable<Array<IProviderOfferResponse>> {
-    return this.httpClient.get<Array<IProviderOfferResponse>>(`${this.backendBaseUrl}/providers/${providerId}/offers`);
+  uploadPicture(providerId: number, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.httpClient.post(`${this.backendBaseUrl}/providers/${providerId}/upload-picture`, formData);
   }
 
-  createOffer(offerCreateRequest: IOfferCreateRequest) {
-    return this.httpClient.post<IOfferResponse>(`${this.backendBaseUrl}/offers`, offerCreateRequest);
+  getProviderPictureUrl(providerId: number) {
+    return `${this.backendBaseUrl}/providers/${providerId}/download-picture`;
   }
 
-  // TODO must be provided in request-body (backend)
-  updateOffer(offerId: number, offerUpdateRequest: IOfferUpdateRequest) {
-    return this.httpClient.put(`${this.backendBaseUrl}/offers/${offerId}`, offerUpdateRequest);
+  getInquiredHelpers(providerId: number): Observable<IHelperInquiry> {
+    return this.httpClient.get<any>(`${this.backendBaseUrl}/providers/${providerId}/inquired`);
   }
 
-  // TODO we need an endpoint to delete offers (allowed for both or only provider?)
-  // TODO currently not implemented in backend
-  deleteOffer(offerId: number) {
-    return this.httpClient.delete(`${this.backendBaseUrl}/offers/${offerId}`);
+  changeContactedState(inquiryId: number) {
+    return this.httpClient.put(`${this.backendBaseUrl}/providers/inquire/${inquiryId}`, {});
   }
 
-  // TODO backend -> rename users to helpers
-  createHelper(helperRequest: IHelperRequest): Observable<IHelperResponse> {
-    return this.httpClient.post<IHelperResponse>(`${this.backendBaseUrl}/helpers`, helperRequest);
+  deleteInquiryAsProvider(inquiryId: number) {
+    return this.httpClient.delete(`${this.backendBaseUrl}/providers/inquire/${inquiryId}`);
   }
 
-  updateHelper(helperId: number, helperRequest: IHelperRequest) {
-    return this.httpClient.put<IHelperResponse>(`${this.backendBaseUrl}/helpers/${helperId}`, helperRequest);
+  createHelper(helperRequest: IHelper): Observable<IHelper> {
+    return this.httpClient.post<IHelper>(`${this.backendBaseUrl}/helpers`, helperRequest);
   }
 
-  deleteHelper(helperId: number): Observable<IHelperResponse> {
-    return this.httpClient.delete<IHelperResponse>(`${this.backendBaseUrl}/helpers/${helperId}`);
+  getHelper(helperId: number): Observable<IHelper> {
+    return this.httpClient.get<IHelper>(`${this.backendBaseUrl}/helpers/${helperId}`);
   }
 
-
-  getHelperFavorites(helperId: number): Observable<Array<IProviderResponse>> {
-    return this.httpClient.get<Array<IProviderResponse>>(`${this.backendBaseUrl}/helpers/${helperId}/favorites`);
+  updateHelper(helperId: number, helperRequest: IHelper) {
+    return this.httpClient.put<IHelper>(`${this.backendBaseUrl}/helpers/${helperId}`, helperRequest);
   }
 
-  getHelperOffers(helperId: number): Observable<Array<IProviderResponse>> {
-    return this.httpClient.get<Array<IProviderResponse>>(`${this.backendBaseUrl}/helpers/${helperId}/offers`);
+  deleteHelper(helperId: number) {
+    return this.httpClient.delete(`${this.backendBaseUrl}/helpers/${helperId}`);
   }
 
-  // TODO backend -> move favorites to /helpers/{id}/favorites ?
-  createFavorite(favoriteCreateRequest: IFavoriteCreateRequest): Observable<IFavoriteCreateResponse> {
-    return this.httpClient.post<IFavoriteCreateResponse>(`${this.backendBaseUrl}/favorites`, favoriteCreateRequest);
+  getHelperFavorites(helperId: number): Observable<Array<IHelperFavorite>> {
+    return this.httpClient.get<Array<IHelperFavorite>>(`${this.backendBaseUrl}/helpers/${helperId}/favorites`);
   }
 
-  // TODO backend -> move favorites to /helpers/{id}/favorites ?
+  getInquiredProviders(helperId: number): Observable<Array<IProviderInquired>> {
+    return this.httpClient.get<Array<IProviderInquired>>(`${this.backendBaseUrl}/helpers/${helperId}/inquired`);
+  }
+
+  createFavorite(helperProviderRequest: IHelperProviderRequest): Observable<IHelperFavorite> {
+    return this.httpClient.post<IHelperFavorite>(`${this.backendBaseUrl}/helpers/favorites`, helperProviderRequest);
+  }
+
   deleteFavorite(favoriteId: number) {
-    return this.httpClient.delete(`${this.backendBaseUrl}/favorites/${favoriteId}`);
+    return this.httpClient.delete(`${this.backendBaseUrl}/helpers/favorites/${favoriteId}`);
+  }
+
+  createInquiry(helperProviderRequest: IHelperProviderRequest): Observable<IHelperInquiry> {
+    return this.httpClient.post<IHelperInquiry>(`${this.backendBaseUrl}/helpers/inquire`, helperProviderRequest);
+  }
+
+  deleteInquiryAsHelper() {
+    return this.httpClient.delete(`${this.backendBaseUrl}/helpers/inquire`);
   }
 }

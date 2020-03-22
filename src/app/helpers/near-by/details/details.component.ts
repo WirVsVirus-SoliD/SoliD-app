@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
-import { IProviderResponse } from 'src/app/common/interfaces/providers-controller.interface';
+import { IProvider } from 'src/app/common/interfaces/providers-controller.interface';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DetailsComponent {
 
-  public provider: IProviderResponse;
+  public provider: IProvider;
 
   constructor(private route: ActivatedRoute) {}
 

@@ -1,8 +1,8 @@
-import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Map } from 'leaflet';
-import { IProviderResponse } from 'src/app/common/interfaces/providers-controller.interface';
 import { MapService } from 'src/app/common/services/map.service';
 import { uuid } from 'uuidv4';
+import { IProvider } from 'src/app/common/interfaces/providers-controller.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -21,19 +21,23 @@ export class MapComponent {
   private resultMock = ['Mühlacker', 'Mühlberg'];
 
   @Input() public activeSegment: string;
-  @Input() public providerGroups: Array<Array<IProviderResponse>> = [];
+  @Input() public providerGroups: Array<Array<IProvider>> = [];
   @Output() public segmentHasChanged = new EventEmitter<string>();
   constructor(
     private mapSrv: MapService,
+    private cdRef: ChangeDetectorRef
   ) { }
 
   ngAfterViewInit() {
     this.loadMap().then(() => {
       setTimeout(() => {
         this.map.invalidateSize(false);
-        const eL = this.mapSrv.getMapAPI();
-        this.providerGroups.forEach(p => this.createMarker(p));
-        this.map.fitBounds(new eL.LatLngBounds(this.providerGroups.reduce((o, c) => o.concat(c), []).map(p => [p.latitude, p.longitude])), { padding: [15, 15] })
+        if(this.providerGroups.length > 0) {
+          const eL = this.mapSrv.getMapAPI();
+          this.providerGroups.forEach(p => this.createMarker(p));
+          this.map.fitBounds(new eL.LatLngBounds(this.providerGroups.reduce((o, c) => o.concat(c), []).map(p => [p.latitude, p.longitude])), { padding: [30, 30] });
+          this.cdRef.markForCheck();
+        }
       });
     });
   }
@@ -66,7 +70,7 @@ export class MapComponent {
       });
   }
 
-  private createMarker(providerGroup: Array<IProviderResponse>): any {
+  private createMarker(providerGroup: Array<IProvider>): any {
     const eL = this.mapSrv.getMapAPI();
     const boundingBox = new eL.LatLngBounds(providerGroup.map(p => [p.latitude, p.longitude]));
     const className = 'custom-marker-icon';

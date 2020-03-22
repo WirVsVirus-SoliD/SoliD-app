@@ -4,7 +4,7 @@
 
 <ion-content [fullscreen]="true">
   <ng-container [ngSwitch]="activeSegment">
-    <solid-map *ngSwitchCase="'map'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerList"></solid-map>
-    <solid-provider-list *ngSwitchCase="'list'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerList"></solid-provider-list>
+    <solid-map *ngSwitchCase="'map'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerGroups"></solid-map>
+    <solid-provider-list *ngSwitchCase="'list'" [activeSegment]="activeSegment" (segmentHasChanged)="segmentChanged($event)" [providerGroups]="providerGroups"></solid-provider-list>
   </ng-container>
 </ion-content>
