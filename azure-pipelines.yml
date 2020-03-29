@@ -12,9 +12,6 @@ trigger:
 stages:
 
 - stage: image
-  dependsOn:
-    - app
-  condition: succeeded('app')
   jobs:
     - job: image
       steps:
