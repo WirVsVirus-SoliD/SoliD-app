@@ -1,0 +1,68 @@
+variables:
+  devops_rootdir: /opt/solid
+  devops_dir: $(devops_rootdir)/app
+  app_dir: /opt/app/app-$(Build.SourceBranchName)
+  app_rooturl: solid-app.52-174-17.190.nip.io
+  env_file: /tmp/env-$(Build.SourceBranchName)
+
+
+trigger:
+  branches:
+     include:
+     - '*'
+
+stages:
+
+- stage: image
+  jobs:
+    - job: image
+      steps:
+      - task: Docker@2
+        displayName: Login to Docker Hub
+        inputs:
+          command: login
+          containerRegistry: dockerhub
+      - task: Docker@2
+        displayName: build
+        inputs:
+          command: build
+          arguments: --build-arg branch=$(Build.SourceBranchName)
+          repository: wirvsvirussolid/solid
+          tags: |
+            app-$(Build.SourceBranchName)
+      - task: Docker@2
+        displayName: push
+        inputs:
+          command: push 
+          containerRegistry: dockerhub
+          repository: wirvsvirussolid/solid
+          tags: |
+            app-$(Build.SourceBranchName)
+
+- stage: deploy 
+  dependsOn:
+    - image
+  condition: succeeded('image')
+  jobs:
+  - deployment: VMDeploy
+    displayName: deploy
+    environment:
+      name: SoliD
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              workingDirectory: /
+              script: |
+                sudo mkdir -p $(app_dir)
+                sudo rsync -av $(devops_dir)/ $(app_dir)/
+                echo -e "APP_VIRTUAL_HOST=$(Build.SourceBranchName).$(app_rooturl)\nAPP_BRANCH=$(Build.SourceBranchName)" > $(env_file)
+                sudo mv $(env_file) $(app_dir)/.env
+                cd $(app_dir)
+                sudo docker-compose stop app
+                sudo docker-compose pull --parallel
+                sudo docker-compose up -d --no-deps app
