@@ -1,0 +1,59 @@
+variables:
+  devops_dir: $(devops_rootdir)/app
+  app_dir: /opt/app/app-$(Build.SourceBranchName)
+  app_rooturl: solid-app.52-174-17.190.nip.io
+
+
+trigger:
+  branches:
+     include:
+     - '*'
+
+stages:
+
+- stage: image
+  dependsOn:
+    - app
+  condition: succeeded('app')
+  jobs:
+    - job: image
+      steps:
+      - task: Docker@2
+        displayName: Login to Docker Hub
+        inputs:
+          command: login
+          containerRegistry: dockerhub
+      - task: Docker@2
+        displayName: Build and Push
+        inputs:
+          command: buildAndPush
+          repository: wirvsvirussolid/solid
+          tags: |
+            app-$(Build.SourceBranchName)
+
+- stage: deploy 
+  dependsOn:
+    - image
+  condition: succeeded('image')
+  jobs:
+  - deployment: VMDeploy
+    displayName: deploy
+    environment:
+      name: SoliD
+      resourceType: VirtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'
+              workingDirectory: /
+              script: |
+                mkdir -p $(app_dir)
+                cp -R $(devops_dir) $(app_dir)
+                cd $(app_dir)
+                echo -e "APP_LETSENCRYPT_HOST=$(Build.SourceBranchName).$(app_rooturl)\nAPP_VIRTUAL_HOST=$(Build.SourceBranchName).$(app_rooturl)" > .env
+                sudo docker-compose stop app
+                sudo docker-compose pull --parallel
+                sudo docker-compose up -d --no-deps app
