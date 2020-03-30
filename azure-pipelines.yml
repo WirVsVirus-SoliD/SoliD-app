@@ -1,7 +1,9 @@
 variables:
+  devops_rootdir: /opt/solid
   devops_dir: $(devops_rootdir)/app
   app_dir: /opt/app/app-$(Build.SourceBranchName)
   app_rooturl: solid-app.52-174-17.190.nip.io
+  env_file: /tmp/env-$(Build.SourceBranchName)
 
 
 trigger:
@@ -21,9 +23,18 @@ stages:
           command: login
           containerRegistry: dockerhub
       - task: Docker@2
-        displayName: Build and Push
+        displayName: build
         inputs:
-          command: buildAndPush
+          command: build
+          arguments: --build-arg branch=$(Build.SourceBranchName)
+          repository: wirvsvirussolid/solid
+          tags: |
+            app-$(Build.SourceBranchName)
+      - task: Docker@2
+        displayName: push
+        inputs:
+          command: push 
+          containerRegistry: dockerhub
           repository: wirvsvirussolid/solid
           tags: |
             app-$(Build.SourceBranchName)
@@ -47,10 +58,11 @@ stages:
               targetType: 'inline'
               workingDirectory: /
               script: |
-                mkdir -p $(app_dir)
-                cp -R $(devops_dir) $(app_dir)
+                sudo mkdir -p $(app_dir)
+                sudo rsync -av $(devops_dir)/ $(app_dir)/
+                echo -e "APP_VIRTUAL_HOST=$(Build.SourceBranchName).$(app_rooturl)" > $(env_file)
+                sudo mv $(env_file) $(app_dir)/.env
                 cd $(app_dir)
-                echo -e "APP_LETSENCRYPT_HOST=$(Build.SourceBranchName).$(app_rooturl)\nAPP_VIRTUAL_HOST=$(Build.SourceBranchName).$(app_rooturl)" > .env
                 sudo docker-compose stop app
                 sudo docker-compose pull --parallel
                 sudo docker-compose up -d --no-deps app
